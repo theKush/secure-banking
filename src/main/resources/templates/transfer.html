@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Hello World!</title>
+        
+        <style>
+        	th {
+        		width: 100px;
+        		border: 1px solid black;
+        	}
+        	h1 {
+        		text-align: center;
+        	}
+        </style>
+    </head>
+    <body>
+		
+		<h1>Online Bank</h1>
+
+        
+        <table style="margin-left: auto; margin-right: auto">
+        	<tr>
+        		<th>
+        			<a th:href="@{/hello}">Home</a>
+        		</th>
+        		<th>
+        			<a th:href="@{/balance}">Check Balance</a>
+        		</th>
+        		<th>
+        			<a th:href="@{/transfer}">Transfer Funds</a>
+        		</th>
+       	  		<th>
+        			<a th:href="@{/profile}">Change Profile</a>
+        		</th>
+        		<th>
+					<form th:action="@{/logout}" method="post">
+            			<input type="submit" value="Sign Out"/>
+        			</form>
+        		</th>
+        	</tr>
+        	<tr>
+        		<td colspan="5">
+   			        <h2 th:inline="text">Transfer Funds</h2>
+        		</td>
+        	</tr>
+        </table>
+    
+    </body>
+</html>
