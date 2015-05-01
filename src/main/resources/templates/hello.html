@@ -42,6 +42,10 @@
         	<tr>
         		<td colspan="5">
    			        <h2 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h2>
+	                <div th:if="${message}">
+            			<p style="color: red;" th:text="${message}" />
+            		<br />
+        			</div>
    			        <p>
    			        	<br/>
    			        	This is HW 4 implementation by <i>Kush Patel, Nicholas Rodriguez, Tristan Currens</i>
