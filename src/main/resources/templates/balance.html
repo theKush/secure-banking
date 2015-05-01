@@ -44,6 +44,20 @@
    			        <h2 th:inline="text">Check Balance</h2>
         		</td>
         	</tr>
+        	<tr>
+        		<td colspan="5">
+        			<table>
+        				<tr>
+        					<td><b>Account Number</b></td>
+        					<td><b>Balance</b></td>
+        				</tr>
+        				<tr>
+        					<td th:text="${accountNumber}"></td>
+        					<td th:text="${balance}"></td>
+        				</tr>
+        			</table>
+        		</td>
+        	</tr>
         </table>
     
     </body>
