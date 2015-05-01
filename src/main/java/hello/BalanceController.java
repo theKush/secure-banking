@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class BalanceController {
 	
 	@RequestMapping(value = "/balance", method= RequestMethod.GET)
-	public String transferForm(Model model){
+	public String balance(Model model){
 		model.addAttribute("balance", "1200.0");
 		model.addAttribute("accountNumber", "1234567890");
 		return "balance";

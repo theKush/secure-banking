@@ -42,6 +42,47 @@
         	<tr>
         		<td colspan="5">
    			        <h2 th:inline="text">Profile</h2>
+   			        <form action="#" th:action="@{/profile}" th:object="${profile}" method="post">
+				        <table>
+				        	<tr>
+				        		<td>
+				        			First Name:
+				        		</td>
+				        		<td>
+				        			<input type="text" name="firstName" th:field="*{firstName}"/>
+				        		</td>
+				        	</tr>
+				        	<tr>
+				        		<td>
+				        			Last Name:
+				        		</td>
+				        		<td>
+				        			<input type="text" name="lastName" th:field="*{lastName}"/>
+				        		</td>
+				        	</tr>
+				        	<tr>
+				        		<td>
+				        			Email:
+				        		</td>
+				        		<td>
+				        			<input type="text" name="email" th:field="*{email}"/>
+				        		</td>
+				        	</tr>
+				        	<tr>
+				        		<td>
+				        			Phone Number:
+				        		</td>
+				        		<td>
+				        			<input type="number" name="phoneNumber" th:field="*{phoneNumber}"/>
+				        		</td>
+				        	</tr>
+				        	<tr>
+				        		<td colspan="2" style="text-align: center">
+				        			<input type="submit" value="Submit"/>
+				        		</td>
+				        	</tr>
+				        </table>
+			        </form>
         		</td>
         	</tr>
         </table>
