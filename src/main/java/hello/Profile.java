@@ -4,7 +4,7 @@ public class Profile {
 
     private String firstName;
     private String lastName;
-    private int phoneNumber;
+    private long phoneNumber;
     private String email;
     
 
@@ -29,10 +29,10 @@ public class Profile {
         this.email = email;
     }
     
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

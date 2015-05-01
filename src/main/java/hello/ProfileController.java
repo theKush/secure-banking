@@ -12,7 +12,10 @@ public class ProfileController {
 	
 	@RequestMapping(value = "/profile", method= RequestMethod.POST)
 	public String transferSubmit(@ModelAttribute Profile profile, Model model){
-		
+		User.firstName = profile.getFirstName();
+		User.lastName = profile.getLastName();
+		User.email = profile.getEmail();
+		User.phoneNumber = profile.getPhoneNumber();
 		model.addAttribute("message", "Profile Change Successfull");
 		
 		System.out.println(profile.getEmail());
@@ -21,7 +24,14 @@ public class ProfileController {
 	
 	@RequestMapping(value = "/profile", method= RequestMethod.GET)
 	public String profileForm(Model model){
-		model.addAttribute("profile", new Profile());
+		Profile profile = new Profile();
+	
+		profile.setFirstName(User.firstName);
+		profile.setLastName(User.lastName);
+		profile.setEmail(User.email);
+		profile.setPhoneNumber(User.phoneNumber);
+		
+		model.addAttribute("profile", profile);
 		return "profile";
 	}
 	
