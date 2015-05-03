@@ -19,7 +19,7 @@
 		<h1>Online Bank</h1>
 
         
-        <table style="margin-left: auto; margin-right: auto">
+        <table style="margin-left: 30%; margin-right: 30%">
         	<tr>
         		<th>
         			<a th:href="@{/hello}">Home</a>
@@ -41,30 +41,12 @@
         	</tr>
         	<tr>
         		<td colspan="5">
-   			        <h2 th:inline="text">Check Balance</h2>
+   			        <h2 th:inline="text">Check Image</h2>
         		</td>
         	</tr>
         	<tr>
         		<td colspan="5">
-        			<table>
-        				<tr>
-        					<td><b>Checking Account #: </b></td>
-        					<td th:text="${checkingAccount}"></td>
-                            <a th:href="@{/checkImage}"> (Check Image) </a>
-        				</tr>
-        				<tr>
-     					    <td><b>Checking Balance: </b></td>
-        					<td th:text="${checkingBalance}">$</td>
-        				</tr>
-        				<tr>
-        					<td><b>Saving Account #: </b></td>
-        					<td th:text="${savingAccount}"></td>
-        				</tr>
-        				<tr>
-     					    <td><b>Saving Balance: </b></td>
-        					<td th:text="${savingBalance}">$</td>
-        				</tr>
-        			</table>
+                    <img src="http://www.rants.org/wp-content/uploads/2007/07/maa/check.jpg" style="width: 70%;"/>
         		</td>
         	</tr>
         </table>
