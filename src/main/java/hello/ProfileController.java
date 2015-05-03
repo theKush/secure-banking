@@ -18,7 +18,7 @@ public class ProfileController {
 		User.phoneNumber = profile.getPhoneNumber();
 		model.addAttribute("message", "Profile Change Successfull");
 		
-		System.out.println(profile.getEmail());
+	
 		return "hello";
 	}
 	

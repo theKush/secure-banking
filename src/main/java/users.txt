@@ -1,18 +1,12 @@
 {
-	"user1":{
+	"user":{
 		"firstName": "Bat",
 		"lastName": "Man",
 		"phoneNumber": 8061234567,
 		"email": "batman@gmail.com",
-		"accountNumber": 1234567890,
-		"balance": 10000000
+		"checkingAccount": 1234567890,
+		"checkingBalance": 10000,
+		"savingAccount": 9876543210,
+		"savingBalance": 1000
 	},
-	"user2":{
-		"firstName": "Super",
-		"lastName": "Man",
-		"phoneNumber": 8061112222,
-		"email": "superman@gmail.com",
-		"accountNumber": 9876543210,
-		"balance": 1000
-	}
 }

@@ -42,6 +42,10 @@
         	<tr>
         		<td colspan="5">
    			        <h2 th:inline="text">Transfer Funds</h2>
+   			        <p th:if="${error}">
+            			<span style="color: red;" th:text="${error}"> </span>
+            		<br /> 
+            		</p>
    			        <form action="#" th:action="@{/transfer}" th:object="${transfer}" method="post">
 				        <table>
 				        	<tr>
@@ -49,7 +53,7 @@
 				        			From Account:
 				        		</td>
 				        		<td>
-				        			<input type="number" name="fromAccount" th:field="*{fromAccount}"/>
+				        			<input type="number" name="fromAccount" th:field="*{fromAccount}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -57,7 +61,7 @@
 				        			To Account:
 				        		</td>
 				        		<td>
-				        			<input type="number" name="toAccount" th:field="*{toAccount}"/>
+				        			<input type="number" name="toAccount" th:field="*{toAccount}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -65,7 +69,7 @@
 				        			Amount:
 				        		</td>
 				        		<td>
-				        			<input type="number" name="amount" th:field="*{amount}"/>
+				        			<input type="number" name="amount" th:field="*{amount}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>

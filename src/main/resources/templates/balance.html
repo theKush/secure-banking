@@ -48,12 +48,20 @@
         		<td colspan="5">
         			<table>
         				<tr>
-        					<td><b>Account Number</b></td>
-        					<td><b>Balance</b></td>
+        					<td><b>Checking Account #: </b></td>
+        					<td th:text="${checkingAccount}"></td>
         				</tr>
         				<tr>
-        					<td th:text="${accountNumber}"></td>
-        					<td th:text="${balance}"></td>
+     					    <td><b>Checking Balance: </b></td>
+        					<td th:text="${checkingBalance}">$</td>
+        				</tr>
+        				<tr>
+        					<td><b>Saving Account #: </b></td>
+        					<td th:text="${savingAccount}"></td>
+        				</tr>
+        				<tr>
+     					    <td><b>Saving Balance: </b></td>
+        					<td th:text="${savingBalance}">$</td>
         				</tr>
         			</table>
         		</td>

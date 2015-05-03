@@ -26,10 +26,12 @@ public class HelloController {
 	@RequestMapping(value = "/hello", method= RequestMethod.GET)
 	public String hello(Model model){
 		// use the flag so that it doesnt try to get the user information every time this page is loaded
-		//if (User.flag == 0) {
+		if (User.flag == 0) {
 			JSONParser parser = new JSONParser();
 	    	try {
-	    		Object obj = parser.parse(new FileReader("/Users/kush/Documents/Spring Tool Suite Workspace/gs-securing-web-initial/src/main/java/users.txt"));
+	    		
+	    		Object obj = parser.parse(new FileReader(System.getProperty("user.dir") + "/src/main/java/users.txt"));
+	    		
 	    		
 	    		JSONObject jsonObject = (JSONObject) obj;
 	    		
@@ -43,21 +45,19 @@ public class HelloController {
 	    		User.lastName = (String) user1.get("lastName");
 	    		User.email = (String) user1.get("email");
 	    		User.phoneNumber = (long) user1.get("phoneNumber");
-	    		User.accountNumber = (long) user1.get("accountNumber");
-	    		User.balance = (long) user1.get("balance");
+	    		User.checkingAccount = (long) user1.get("checkingAccount");
+	    		User.checkingBalance = (long) user1.get("checkingBalance");
+	    		User.savingAccount = (long) user1.get("savingAccount");
+	    		User.savingBalance = (long) user1.get("savingBalance");
 	    		
 	    		User.flag = 1;
 
 	    	} catch (Exception e) {
 	    		e.printStackTrace();
 	    	}
-			
-		//}
+		}
 		
-		
-		model.addAttribute("balance", User.balance);
-		model.addAttribute("accountNumber", User.accountNumber);
-		return "balance";
+		return "hello";
 	}
 	
 	

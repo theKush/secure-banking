@@ -12,8 +12,10 @@ public class BalanceController {
 	
 	@RequestMapping(value = "/balance", method= RequestMethod.GET)
 	public String balance(Model model){
-		model.addAttribute("balance", User.balance);
-		model.addAttribute("accountNumber", User.accountNumber);
+		model.addAttribute("checkingBalance", User.checkingBalance);
+		model.addAttribute("checkingAccount", User.checkingAccount);
+		model.addAttribute("savingBalance", User.savingBalance);
+		model.addAttribute("savingAccount", User.savingAccount);
 		return "balance";
 	}
 	
