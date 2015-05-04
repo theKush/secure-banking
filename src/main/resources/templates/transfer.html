@@ -46,14 +46,14 @@
             			<span style="color: red;" th:text="${error}"> </span>
             		<br /> 
             		</p>
-   			        <form action="#" th:action="@{/transfer}" th:object="${transfer}" method="post">
+   			        <form id="transfer" action="#" th:action="@{/transfer}" th:object="${transfer}" method="post">
 				        <table>
 				        	<tr>
 				        		<td>
 				        			From Account:
 				        		</td>
 				        		<td>
-				        			<input type="number" name="fromAccount" th:field="*{fromAccount}" required="required"/>
+				        			<input id="fromAccount" type="number" name="fromAccount" th:field="*{fromAccount}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -61,7 +61,7 @@
 				        			To Account:
 				        		</td>
 				        		<td>
-				        			<input type="number" name="toAccount" th:field="*{toAccount}" required="required"/>
+				        			<input id="toAccount" type="number" name="toAccount" th:field="*{toAccount}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -69,7 +69,7 @@
 				        			Amount:
 				        		</td>
 				        		<td>
-				        			<input type="number" name="amount" th:field="*{amount}" required="required"/>
+				        			<input id="amount" type="number" name="amount" th:field="*{amount}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -82,6 +82,36 @@
         		</td>
         	</tr>
         </table>
-    
+
+        <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+        <script>
+        // <![CDATA[
+            var req = new XMLHttpRequest();
+            $("#transfer").submit(function(e) 
+            {
+                e.preventDefault();
+                var serialized = $('form').serialize();
+                req.open('POST', '/transfer', true);
+
+                var fromAcc = $('#fromAccount').val();
+                var toAcc = $('#toAccount').val();
+                var amount = $('#amount').val();
+
+                var hashFromAccount = CryptoJS.MD5(String(fromAcc));
+                var hashToAccount = CryptoJS.MD5(String(toAcc));
+                var hashAmount = CryptoJS.MD5(String(amount));
+
+                req.setRequestHeader('hashFromAccount', hashFromAccount);
+                req.setRequestHeader('hashToAccount', hashToAccount);
+                req.setRequestHeader('hashAmount', hashAmount);
+
+                req.send(serialized);
+
+                alert('Transfer Successful');
+            });
+        // ]]>
+        </script>
     </body>
 </html>
