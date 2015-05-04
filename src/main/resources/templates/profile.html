@@ -42,14 +42,14 @@
         	<tr>
         		<td colspan="5">
    			        <h2 th:inline="text">Profile</h2>
-   			        <form action="#" th:action="@{/profile}" th:object="${profile}" method="post">
+   			        <form action="#" th:action="@{/profile}" th:object="${profile}" method="post" id="profileForm">
 				        <table>
 				        	<tr>
 				        		<td>
 				        			First Name:
 				        		</td>
 				        		<td>
-				        			<input type="text" name="firstName" th:field="*{firstName}" required="required"/>
+				        			<input type="text" id="firstName" name="firstName" th:field="*{firstName}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -57,7 +57,7 @@
 				        			Last Name:
 				        		</td>
 				        		<td>
-				        			<input type="text" name="lastName" th:field="*{lastName}" required="required"/>
+				        			<input type="text" id="lastName" name="lastName" th:field="*{lastName}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -65,7 +65,7 @@
 				        			Email:
 				        		</td>
 				        		<td>
-				        			<input type="text" name="email" th:field="*{email}" required="required"/>
+				        			<input type="text" id="email" name="email" th:field="*{email}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
@@ -73,12 +73,12 @@
 				        			Phone Number:
 				        		</td>
 				        		<td>
-				        			<input type="number" name="phoneNumber" th:field="*{phoneNumber}" required="required"/>
+				        			<input type="number" id="phoneNumber" name="phoneNumber" th:field="*{phoneNumber}" required="required"/>
 				        		</td>
 				        	</tr>
 				        	<tr>
 				        		<td colspan="2" style="text-align: center">
-				        			<input type="submit" value="Submit"/>
+				        			<input type="submit" value="Submit" id="submitButton"/>
 				        		</td>
 				        	</tr>
 				        </table>
@@ -86,6 +86,54 @@
         		</td>
         	</tr>
         </table>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/pbkdf2.js"></script>
     
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+
+<script th:inline="javascript">
+// <![CDATA[
+
+    $("#profileForm").submit(function(e) {
+        e.preventDefault();
+        var req = new XMLHttpRequest();
+
+        req.open('GET', document.location, false);
+        req.send(null);
+        var passphrase = req.getResponseHeader('passphrase');
+        var salt = req.getResponseHeader('salt');
+        var size = req.getResponseHeader('size');
+        var iv = req.getResponseHeader('iv');
+        size = size/32;
+        var iteration = req.getResponseHeader('iteration');
+
+        var key = CryptoJS.PBKDF2(
+        	      passphrase, 
+        	      CryptoJS.enc.Hex.parse(salt),
+        	      { keySize: parseInt(size), iterations: parseInt(iteration) });
+
+        var serialized = $('form').serialize();
+        
+        console.log("original formData: ", serialized);
+
+        var encrypted = CryptoJS.AES.encrypt(serialized, key, { iv: CryptoJS.enc.Hex.parse(iv) });
+        var ciphertext = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+        
+        console.log("Encrypted Cyphertext: ", ciphertext);
+        
+        req.open('POST', '/profile', true);
+     
+        req.onreadystatechange = function(){
+          if(req.readyState == 4 && req.status == 200){
+              alert("Profile Change Successfull")
+          }
+        }
+      
+        req.send(ciphertext);
+    });
+    
+ // ]]>
+    </script>
     </body>
 </html>
