@@ -17,7 +17,7 @@ import java.io.InputStream;
 public class TransferController {
 	
 	@RequestMapping(value = "/transfer", method= RequestMethod.POST)
-	public String transferSubmit(@ModelAttribute Transfer transfer, Model model, HttpServletRequest request){
+	public String transferSubmit(@ModelAttribute Transfer transfer, Model model, HttpServletRequest request, HttpServletResponse response){
 		
 		try{
 			
@@ -59,37 +59,34 @@ public class TransferController {
 			
 			if (fromAccountCheck && toAccountCheck && amountCheck) {
 				
+				System.out.println( " Integrity Check Passed" );
 				transfer.setFromAccount(Long.parseLong(fromAccount));
 				transfer.setToAccount(Long.parseLong(toAccount));
 				transfer.setAmount(Integer.parseInt(amount));
-				
-				System.out.println("\n After Amount:     " + transfer.getAmount());
-				System.out.println(" From Acount: " + transfer.getFromAccount());
-				System.out.println(" To Acount:   " + transfer.getToAccount());	
 
 				if (((transfer.getFromAccount() != User.checkingAccount) && (transfer.getFromAccount() != User.savingAccount )) || ((transfer.getToAccount() != User.checkingAccount) && (transfer.getToAccount() != User.savingAccount ))) {
 					model.addAttribute("error", "Account Numbers not correct");
-					return "transfer";
+					response.sendRedirect("errors");
 				}
 				else if (transfer.getFromAccount() == transfer.getToAccount()) {
 					model.addAttribute("error", "Cannot transfer to same account");
-					return "transfer";
+					response.sendRedirect("errors");
 				}
 				else if (transfer.getAmount() <= 0){
 					model.addAttribute("error", "Amount should be greater than $0");
-					return "transfer";
+						response.sendRedirect("errors");
 				}
 				
 				if (transfer.getFromAccount() == User.checkingAccount) {
 					if (transfer.getAmount() > User.checkingBalance) {
 						model.addAttribute("error", "Not enough balance in your account");
-						return "transfer";
+						response.sendRedirect("errors");
 					}
 				} 
 				else if (transfer.getFromAccount() == User.savingAccount) {
 					if (transfer.getAmount() > User.savingBalance) {
 						model.addAttribute("error", "Not enough balance in your account");
-						return "transfer";
+						response.sendRedirect("errors");
 					}
 				}
 
@@ -98,6 +95,7 @@ public class TransferController {
 						if (transfer.getAmount() > 0) {
 							User.savingBalance = User.savingBalance + transfer.getAmount();
 							User.checkingBalance = User.checkingBalance - transfer.getAmount();
+							response.sendRedirect("success");
 						}
 					}
 				}
@@ -107,20 +105,16 @@ public class TransferController {
 						if (transfer.getAmount() > 0) {
 							User.savingBalance = User.savingBalance - transfer.getAmount();
 							User.checkingBalance = User.checkingBalance + transfer.getAmount();
+							response.sendRedirect("success");
 						}
 					}
 				}
 			}
-
-			
           //---------------------------------- END OF INTEGRITY CHECK  ----------------------------------------
 
-						
 		}catch (Exception e){
 		    e.printStackTrace();
 		}
-		
-		model.addAttribute("message", "Transfer Successfull");
 		
 		return "hello";
 	}

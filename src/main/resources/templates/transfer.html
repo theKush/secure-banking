@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>Banking System</title>
+        <title>Banking System | Transfer</title>
         
         <style>
         	th {
@@ -88,7 +88,7 @@
         <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
     	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
    	    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
-        <script>
+        <script th:inline="javascript">
         // <![CDATA[
             var req = new XMLHttpRequest();
             $("#transfer").submit(function(e) 
@@ -136,11 +136,11 @@
                 /*********** END Encryption *************/
                 
                 req.onreadystatechange = function(){
-                    if(req.readyState == 4 && req.status == 200){
-                        alert("Transfer Successfull")
-                    }
+                  if(req.readyState == 4 && req.status == 200){
+                      document.body.innerHTML = req.responseText;
                   }
-                
+                }
+
                 req.send(ciphertext);
             });
         // ]]>
