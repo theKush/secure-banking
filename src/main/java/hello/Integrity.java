@@ -1,14 +1,14 @@
 package hello;
 
-import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-public class MD5 {
-
-    public static String getMD5(String md5) {
+public class Integrity {
+	public static Boolean check(String clientHash, String serverHash) {
+		if(clientHash.equals(serverHash)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static String getMD5(String md5) {
       try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
             byte[] array = md.digest(md5.getBytes());
@@ -21,5 +21,5 @@ public class MD5 {
         }
         return "null";
     }
- 
+	
 }

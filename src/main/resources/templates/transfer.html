@@ -83,18 +83,37 @@
         	</tr>
         </table>
 
+    	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/pbkdf2.js"></script>
         <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-
+    	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+   	    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
         <script>
         // <![CDATA[
             var req = new XMLHttpRequest();
             $("#transfer").submit(function(e) 
             {
                 e.preventDefault();
-                var serialized = $('form').serialize();
-                req.open('POST', '/transfer', true);
+                req.open('GET', document.location, false);
+                req.send(null);
+                /********** Confidentiality key ********/
+                var passphrase = req.getResponseHeader('passphrase');
+                var salt = req.getResponseHeader('salt');
+                var size = req.getResponseHeader('size');
+                var iv = req.getResponseHeader('iv');
+                size = size/32;
+                var iteration = req.getResponseHeader('iteration');
 
+                var key = CryptoJS.PBKDF2(
+                	      passphrase, 
+                	      CryptoJS.enc.Hex.parse(salt),
+                	      { keySize: parseInt(size), iterations: parseInt(iteration) });
+                /********** END Confidentiality key ********/
+                
+                var serialized = $('form').serialize();
+                console.log("original formData: ", serialized);
+                
+                /*********** Integrity *************/
                 var fromAcc = $('#fromAccount').val();
                 var toAcc = $('#toAccount').val();
                 var amount = $('#amount').val();
@@ -103,13 +122,26 @@
                 var hashToAccount = CryptoJS.MD5(String(toAcc));
                 var hashAmount = CryptoJS.MD5(String(amount));
 
+                req.open('POST', '/transfer', true);
                 req.setRequestHeader('hashFromAccount', hashFromAccount);
                 req.setRequestHeader('hashToAccount', hashToAccount);
                 req.setRequestHeader('hashAmount', hashAmount);
-
-                req.send(serialized);
-
-                alert('Transfer Successful');
+                /*********** END Integrity *************/
+                
+                /*********** Encryption *************/
+                var encrypted = CryptoJS.AES.encrypt(serialized, key, { iv: CryptoJS.enc.Hex.parse(iv) });
+                var ciphertext = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+                
+                console.log("Encrypted Cyphertext: ", ciphertext);
+                /*********** END Encryption *************/
+                
+                req.onreadystatechange = function(){
+                    if(req.readyState == 4 && req.status == 200){
+                        alert("Transfer Successfull")
+                    }
+                  }
+                
+                req.send(ciphertext);
             });
         // ]]>
         </script>
