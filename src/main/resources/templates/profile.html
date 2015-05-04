@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>Banking System</title>
+        <title>Banking System | profile</title>
         
         <style>
         	th {
@@ -42,6 +42,10 @@
         	<tr>
         		<td colspan="5">
    			        <h2 th:inline="text">Profile</h2>
+   			        	                <div th:if="${message}">
+            			<p style="color: red;" th:text="${message}" />
+            		<br />
+        			</div>
    			        <form action="#" th:action="@{/profile}" th:object="${profile}" method="post" id="profileForm">
 				        <table>
 				        	<tr>
@@ -86,11 +90,12 @@
         		</td>
         	</tr>
         </table>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/pbkdf2.js"></script>
-    
-    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
-    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+        
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/pbkdf2.js"></script>
+        <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+    	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+   	    <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
 
 <script th:inline="javascript">
 // <![CDATA[
@@ -101,6 +106,7 @@
 
         req.open('GET', document.location, false);
         req.send(null);
+        /********** Confidentiality key ********/
         var passphrase = req.getResponseHeader('passphrase');
         var salt = req.getResponseHeader('salt');
         var size = req.getResponseHeader('size');
@@ -112,21 +118,39 @@
         	      passphrase, 
         	      CryptoJS.enc.Hex.parse(salt),
         	      { keySize: parseInt(size), iterations: parseInt(iteration) });
-
-        var serialized = $('form').serialize();
+        /********** END Confidentiality key ********/
         
+        var serialized = $('form').serialize();
         console.log("original formData: ", serialized);
+        
+        /*********** Integrity *************/
+        var firstName = $('#firstName').val();
+        var lastName = $('#lastName').val();
+        var email = $('#email').val();
+        var phoneNumber = $('#phoneNumber').val();
 
+        var hashFirst = CryptoJS.MD5(String(firstName));
+        var hashLast = CryptoJS.MD5(String(lastName));
+        var hashEmail = CryptoJS.MD5(String(email));
+        var hashPhone = CryptoJS.MD5(String(phoneNumber));
+
+        req.open('POST', '/profile', true);
+        req.setRequestHeader('hashFirst', hashFirst);
+        req.setRequestHeader('hashLast', hashLast);
+        req.setRequestHeader('hashEmail', hashEmail);
+        req.setRequestHeader('hashPhone', hashPhone);
+        /*********** END Integrity *************/
+
+         /*********** Encryption *************/
         var encrypted = CryptoJS.AES.encrypt(serialized, key, { iv: CryptoJS.enc.Hex.parse(iv) });
         var ciphertext = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
         
         console.log("Encrypted Cyphertext: ", ciphertext);
-        
-        req.open('POST', '/profile', true);
-     
+        /*********** END Encryption *************/
+
         req.onreadystatechange = function(){
           if(req.readyState == 4 && req.status == 200){
-              alert("Profile Change Successfull")
+        	  document.body.innerHTML = req.responseText;
           }
         }
       
